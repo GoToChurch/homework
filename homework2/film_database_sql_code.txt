@@ -1,0 +1,179 @@
+CREATE TABLE IF NOT EXISTS "LearnJS"."film"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "название" character varying COLLATE pg_catalog."default" NOT NULL,
+    "год_производства" integer NOT NULL,
+    "страна" character varying COLLATE pg_catalog."default" NOT NULL,
+    "слоган" text COLLATE pg_catalog."default",
+    "режиссер" bigint NOT NULL,
+    "сценарист" bigint NOT NULL,
+    "продюссер" bigint NOT NULL,
+    "оператор" bigint NOT NULL,
+    "композитор" bigint NOT NULL,
+    "художник" bigint NOT NULL,
+    "монтаж" bigint NOT NULL,
+    "бюджет" money NOT NULL,
+    "маркетинг" money,
+    "сборы_в_США" money,
+    "сборы_в_мире" money NOT NULL,
+    "премьера_в_России" date,
+    "премьера_в_мире" date NOT NULL,
+    "время" integer NOT NULL,
+    CONSTRAINT "film_pkey" PRIMARY KEY ("ID"),
+    CONSTRAINT "film_Композитор_fkey" FOREIGN KEY ("Композитор")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_монтаж_fkey" FOREIGN KEY ("монтаж")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_Оператор_fkey" FOREIGN KEY ("оператор")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_Продюссер_fkey" FOREIGN KEY ("продюссер")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_Режиссер_fkey" FOREIGN KEY ("режиссер")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_Сценарист_fkey" FOREIGN KEY ("сценарист")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_Художник_fkey" FOREIGN KEY ("художник")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
+)
+
+CREATE TABLE IF NOT EXISTS "LearnJS"."person"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "имя" character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    "фамилия" character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    "возраст" integer NOT NULL,
+    CONSTRAINT "person_pkey" PRIMARY KEY ("id")
+)
+
+CREATE TABLE IF NOT EXISTS "LearnJS"."viewers"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "страна" character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "giewers_pkey" PRIMARY KEY ("id")
+)
+
+
+CREATE TABLE IF NOT EXISTS "LearnJS"."genres"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "название" character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "genres_pkey" PRIMARY KEY ("id")
+)
+
+CREATE TABLE IF NOT EXISTS "LearnJS"."profession"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "название" character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "profession_pkey" PRIMARY KEY ("id")
+)
+
+CREATE TABLE IF NOT EXISTS "LearnJS"."film_actors"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "film_id" bigint NOT NULL,
+    "person_id" bigint NOT NULL,
+    CONSTRAINT "film_actors_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "film_actors_film_id_fkey" FOREIGN KEY ("film_id")
+        REFERENCES "LearnJS"."film" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_actors_person_id_fkey" FOREIGN KEY ("person_id")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
+)
+
+CREATE TABLE IF NOT EXISTS "LearnJS"."film_dubActors"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "film_id" bigint NOT NULL,
+    "person_id" bigint NOT NULL,
+    CONSTRAINT "film_dubActors_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "film_dubActors_film_id_fkey" FOREIGN KEY ("film_id")
+        REFERENCES "LearnJS"."film" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_dubActors_person_id_fkey" FOREIGN KEY ("person_id")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
+)
+
+CREATE TABLE IF NOT EXISTS "LearnJS"."film_genres"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "film_id" bigint NOT NULL,
+    "genre_id" bigint NOT NULL,
+    CONSTRAINT "film_genres_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "film_genres_film_id_fkey" FOREIGN KEY ("film_id")
+        REFERENCES "LearnJS"."film" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_genres_genre_id_fkey" FOREIGN KEY ("genre_id")
+        REFERENCES "LearnJS"."genres" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
+)
+
+CREATE TABLE IF NOT EXISTS "LearnJS"."film_viewers"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "film_id" bigint NOT NULL,
+    "viewer_id" bigint NOT NULL,
+    CONSTRAINT "film_viewers_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "film_viewers_fIlm_id_fkey" FOREIGN KEY ("film_id")
+        REFERENCES "LearnJS"."film" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "film_viewers_viewer_id_fkey" FOREIGN KEY ("viewer_id")
+        REFERENCES "LearnJS"."viewers" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
+)
+
+CREATE TABLE IF NOT EXISTS "LearnJS"."person_profession"
+(
+    "id" bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    "person_id" bigint NOT NULL,
+    "profession_id" bigint NOT NULL,
+    CONSTRAINT "person_profession_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "person_profession_person_id_fkey" FOREIGN KEY ("person_id")
+        REFERENCES "LearnJS"."person" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "person_profession_profession_id_fkey" FOREIGN KEY ("profession_id")
+        REFERENCES "LearnJS"."profession" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
+)
