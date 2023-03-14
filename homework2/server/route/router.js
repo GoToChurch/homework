@@ -7,7 +7,6 @@ module.exports = class Router {
         if(!this.endpoints[path]) {
             this.endpoints[path] = {}
         }
-        // /users [GET, POST, PUT] /posts [GET, POST, PUT, DELETE]
         const endpoint = this.endpoints[path];
 
         if(endpoint[method]) {

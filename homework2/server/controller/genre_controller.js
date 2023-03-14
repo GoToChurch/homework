@@ -11,30 +11,44 @@ class GenreContoller {
         let genres;
         const id = req.params.id;
 
-        if (id) {
-            genres = await db.query(`SELECT * FROM genre
+        try {
+            if (id) {
+                genres = await db.query(`SELECT * FROM genre
                                      WHERE id = $1`, [id]);
-        } else {
-            genres = await db.query(`SELECT * from genre`);
-        }
+            } else {
+                genres = await db.query(`SELECT * from genre`);
+            }
 
-        res.send(genres.rows);
+            res.send(genres.rows);
+        } catch (err) {
+            res.send('Ошибка: Параметр id должен быть числом');
+        }
     }
 
     async updateGenre(req, res) {
         const {id, name} = req.body;
-        const genre = await db.query(`UPDATE genre SET name = $2
+
+        try {
+            const genre = await db.query(`UPDATE genre SET name = $2
                                      WHERE id = $1 RETURNING *`, [id, name]);
 
-        res.send(genre.rows[0])
+            res.send(genre.rows[0])
+        } catch (err) {
+            res.send('Ошибка: Параметр id должен быть числом');
+        }
     }
 
     async deleteGenre(req, res) {
         const id = req.params.id;
-        if (id) {
-            const genre = await db.query(`DELETE FROM genre 
+
+        try {
+            if (id) {
+                const genre = await db.query(`DELETE FROM genre 
                                      WHERE id = $1`, [id]);
-            res.send(genre.rows[0]);
+                res.send(genre.rows[0]);
+            }
+        } catch (err) {
+            res.send('Ошибка: Параметр id должен быть числом');
         }
     }
 }

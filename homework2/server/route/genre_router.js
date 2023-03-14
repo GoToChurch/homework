@@ -1,6 +1,7 @@
 const Router = require('../route/Router');
 const genreController = require('../controller/genre_controller');
 
+
 const router = new Router()
 
 router.get('/genres', genreController.getGenres);
