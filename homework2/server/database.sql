@@ -1,0 +1,32 @@
+CREATE TABLE IF NOT EXISTS film
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    year integer NOT NULL,
+    CONSTRAINT film_pkey PRIMARY KEY (id)
+)
+
+CREATE TABLE IF NOT EXISTS genre
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "Genre_pkey" PRIMARY KEY (id)
+)
+
+CREATE TABLE IF NOT EXISTS film_genres
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    film_id bigint NOT NULL,
+    genre_id bigint NOT NULL,
+    CONSTRAINT "Film_genres_pkey" PRIMARY KEY (id),
+    CONSTRAINT "Film_genres_Film_ID_fkey" FOREIGN KEY (film_id)
+        REFERENCES film (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID,
+    CONSTRAINT "Film_genres_Genre_ID_fkey" FOREIGN KEY (genre_id)
+        REFERENCES genre (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        NOT VALID
+)
