@@ -33,6 +33,8 @@ class FilmContoller {
     async getFilms(req, res) {
         let films;
         const id = req.params.id;
+        const name = req.params.name;
+        const year = req.params.year;
 
         try {
             if (id) {
@@ -40,6 +42,21 @@ class FilmContoller {
                                      JOIN film_genres ON film_genres.film_id = film.id
                                      JOIN genre ON film_genres.genre_id = genre.id
                                      WHERE film.id = $1`, [id]);
+            } else if (name && year) {
+                films = await db.query(`SELECT film.id, film.name, year, genre.name AS genre FROM film
+                                     JOIN film_genres ON film_genres.film_id = film.id
+                                     JOIN genre ON film_genres.genre_id = genre.id
+                                     WHERE film.name = $1 AND film.year = $2`, [name, year]);
+            } else if (name) {
+                films = await db.query(`SELECT film.id, film.name, year, genre.name AS genre FROM film
+                                     JOIN film_genres ON film_genres.film_id = film.id
+                                     JOIN genre ON film_genres.genre_id = genre.id
+                                     WHERE film.name = $1`, [name]);
+            } else if (year) {
+                films = await db.query(`SELECT film.id, film.name, year, genre.name AS genre FROM film
+                                     JOIN film_genres ON film_genres.film_id = film.id
+                                     JOIN genre ON film_genres.genre_id = genre.id
+                                     WHERE film.year = $1`, [year]);
             } else {
                 films = await db.query(`SELECT film.id, film.name, year, genre.name AS genre FROM film
                                      JOIN film_genres ON film_genres.film_id = film.id
@@ -48,7 +65,7 @@ class FilmContoller {
 
             res.send(films.rows);
         } catch (e) {
-            res.send('Ошибка: Параметр id должен быть числом')
+            res.send('Ошибка: Параметр id или year должны быть числом')
         }
 
     }

@@ -10,11 +10,15 @@ class GenreContoller {
     async getGenres(req, res) {
         let genres;
         const id = req.params.id;
+        const name = req.params.name;
 
         try {
             if (id) {
                 genres = await db.query(`SELECT * FROM genre
                                      WHERE id = $1`, [id]);
+            } else if (name) {
+                genres = await db.query(`SELECT * FROM genre
+                                     WHERE name = $1`, [name]);
             } else {
                 genres = await db.query(`SELECT * from genre`);
             }
